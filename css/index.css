@@ -1,0 +1,141 @@
+body {
+    color: white;
+    font-size: 20px;
+}
+
+.top-section {
+    position: relative;
+    margin-top: -70px;
+    height: 80vh;
+    width: 100%;
+    text-align: center;
+}
+
+.bg-div {
+    background-size: cover;
+    background: linear-gradient( rgba(0, 0, 0, 0), rgba(0, 0, 0, 1) ), url("https://image.ibb.co/kMU2sJ/architectural_design_architecture_building_140963.jpg");
+    background-attachment: fixed;
+    background-position: center;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    z-index: -9;
+}
+
+h1 {
+    padding-top: 10%;
+    font-size: 4em;
+    letter-spacing: 1.5px;
+    text-shadow: 0px 5px 8px rgba(0, 0, 0, 1);
+}
+
+h2 {
+    text-shadow: 0px 5px 8px rgba(0, 0, 0, 1);
+
+}
+
+#search {
+    display: inline-block;
+    margin-top: 1%;
+    width: 33%;
+    border: none;
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
+    padding: 12px 24px;
+}
+
+#city {
+    display: inline-block;
+    margin-left: 28.5%;
+    margin-top: 1%;
+    width: 11.5%;
+    border: none;
+    border-radius: 10px;
+    padding: 12px 24px;
+}
+
+#state {
+    display: inline-block;
+    margin-top: 1%;
+    width: 11.5%;
+    border: none;
+    border-radius: 10px;
+    padding: 12px 24px;
+}
+
+button {
+    padding: 12px 24px;
+    margin-left: -4px;
+    border: none;
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+    background-color: #f9320c;
+}
+
+button:hover {
+    opacity: 0.85;
+}
+
+i {
+    z-index: 2;
+    color: white;
+}
+
+.bot-section {
+    color: black;
+    padding-bottom: 5%;
+}
+
+h3 {
+    text-align: center;
+    font-size: 1.5em;
+}
+
+.p-text {
+    padding: 0 33%;
+    margin-left: 3%;
+    letter-spacing: 0.25px;
+}
+
+.sec-img {
+    padding-top: 5%;
+    width: 25%;
+    display: block;
+    margin: 0 auto;
+}
+
+.italics {
+    font-style: italic;
+}
+
+.grid {
+    display: block;
+    width: 100%;
+    margin-top: 0.5% !important;
+    margin: auto;
+}
+
+.column {
+    padding: 25% 25%;
+}
+
+.logo-img {
+    display: block;
+    margin: 0 auto;
+    max-width: 150px;
+    padding-top: 25%;
+}
+
+@media screen and (max-width: 420px) {
+    .p-text {
+        padding: 0 50px;
+        margin-left: 3%;
+    }
+    h3 {
+        padding: 0 50px;
+    }
+
+    .sec-img {
+        width: 100%;
+    }
+}
