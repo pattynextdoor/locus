@@ -23,6 +23,8 @@ body {
 }
 
 h1 {
+    text-align: center;
+    margin-right: 5%;
     padding-top: 10%;
     font-size: 4em;
     letter-spacing: 1.5px;
@@ -30,8 +32,16 @@ h1 {
 }
 
 h2 {
+    margin-top: -100px;
     text-shadow: 0px 5px 8px rgba(0, 0, 0, 1);
 
+}
+
+#landing-icon {
+  width: 256px;
+  margin: auto;
+  vertical-align: middle;
+  margin-right: -5%;
 }
 
 #search {
