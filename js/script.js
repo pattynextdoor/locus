@@ -37,7 +37,7 @@ function sleep(milliseconds) {
 
 function chooseIcon(category) {
   if (category == 'EATING - DRINKING') {
-    return 'https://image.ibb.co/je9x1y/restaurant.png';
+    return 'https://image.ibb.co/nCpQMy/restaurant.png';
   }
   else if (category == 'EDUCATION') {
     return 'https://image.ibb.co/hXwXZJ/education.png';
@@ -55,7 +55,7 @@ function chooseIcon(category) {
     return 'https://image.ibb.co/fpDeEJ/travel.png';
   }
   else if (category == 'PERSONAL SERVICES') {
-    return 'https://image.ibb.co/cr9a4J/store.png';
+    return 'https://image.ibb.co/hnzguJ/store_1.png';
   }
   else {
     console.log("Error choosing icon: Invalid business category");
@@ -208,8 +208,52 @@ function(Map, MapView, Graphic, BasemapGallery, Expand) {
 
     teleHttp.onreadystatechange = function() {
       if (teleHttp.readyState == 4 && teleHttp.status == 200) {
-        qolData = JSON.parse(teleHttp.responseText);
-        console.log(qolData._embedded['location:nearest-cities'][0]);
+        qolCity = JSON.parse(teleHttp.responseText);
+        qolCity = qolCity._embedded['location:nearest-cities'][0]._links['location:nearest-city'].href;
+
+        var teleHttp2 = new XMLHttpRequest();
+        teleHttp2.onreadystatechange = function() {
+          if (teleHttp2.readyState == 4 && teleHttp2.status == 200) {
+            qolData = JSON.parse(teleHttp2.responseText);
+            urbanAreaLink = qolData._links["city:urban_area"].href;
+
+            var teleHttp3 = new XMLHttpRequest();
+
+            teleHttp3.onreadystatechange = function() {
+              if (teleHttp3.readyState == 4 && teleHttp3.status == 200) {
+                var qolData = (JSON.parse(teleHttp3.responseText));
+                console.log(qolData.categories);
+
+                var envQuality = qolData.categories[10].score_out_of_10;
+              
+                var envEl = document.getElementById("envQuality");
+                envEl.textContent = envQuality;
+
+                var taxQuality = qolData.categories[12].score_out_of_10;
+
+                var taxEl = document.getElementById("taxQuality");
+                taxEl.textContent = taxQuality;
+
+                qolData = qolData.summary;
+                var parser = new DOMParser();
+
+                var el = parser.parseFromString(qolData, "text/html")
+                console.log(el.childNodes[0].innerText);
+                var teleText = el.childNodes[0].innerText;
+
+                var teleportEl = document.getElementById('teleport');
+                teleportEl.textContent = teleText;
+              }
+            };
+
+            teleHttp3.open("GET", urbanAreaLink + 'scores', true);
+            teleHttp3.send(null);
+          }
+        }
+        
+        teleHttp2.open("GET", qolCity, true);
+        teleHttp2.send(null);
+
       }
     }
   

@@ -29,18 +29,23 @@ h2 {
   text-align: center;
 }
 
-li {
-  font-size: 1.5em;
-  
-  text-align: right; 
-  margin: 20px auto;
-  margin-right: 50%;  
+.content {
+  padding: 0 10%;
 }
 
-i {
-  margin-right: 10px;
+#teleport {
+  font-size: 1.2em;
 }
 
 ul {
   list-style-type: none;
+  text-align: right;
+}
+
+li {
+  padding-right: 50%;
+}
+
+.qol {
+  font-size: 3em;
 }
