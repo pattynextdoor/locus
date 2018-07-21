@@ -5,9 +5,13 @@ html, body, #viewDiv {
     width: 100%;
 }
 
+#viewDiv {
+  border-top: 3px solid #f9320c;
+}
+
 .bottom-sec {
   background: url('../img/memphis-colorful.png');
-
+  letter-spacing: 1px;
 }
 
 h1 {
