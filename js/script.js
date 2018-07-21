@@ -35,13 +35,40 @@ function sleep(milliseconds) {
   }
 }
 
+function chooseIcon(category) {
+  if (category == 'EATING - DRINKING') {
+    return 'https://image.ibb.co/je9x1y/restaurant.png';
+  }
+  else if (category == 'EDUCATION') {
+    return 'https://image.ibb.co/hXwXZJ/education.png';
+  }
+  else if (category == 'ATTRACTIONS - RECREATION') {
+    return 'https://image.ibb.co/nnMc1y/attractions.png';
+  }
+  else if (category == 'HEALTH CARE SERVICES') {
+    return 'https://image.ibb.co/dKwzEJ/healthcare.png';
+  }
+  else if (category == 'SHOPPING') {
+    return 'https://image.ibb.co/g6bzEJ/shopping.png';
+  }
+  else if (category == 'TRAVEL') {
+    return 'https://image.ibb.co/fpDeEJ/travel.png';
+  }
+  else if (category == 'PERSONAL SERVICES') {
+    return 'https://image.ibb.co/cr9a4J/store.png';
+  }
+  else {
+    console.log("Error choosing icon: Invalid business category");
+  }
+}
+
 function plotOnboardPOIs(data, Graphic, view) {
 
     for(var i = 0; i < data.length; i++) {
         var lat = data[i].geo_latitude;
         var lng = data[i].geo_longitude;
 
-        var poi= {
+        var poi = {
             type: "point",
             longitude: lng,
             latitude: lat
@@ -49,9 +76,9 @@ function plotOnboardPOIs(data, Graphic, view) {
 
         var poiSymbol = {
             type: "picture-marker",
-            url: "https://www.iconsdb.com/icons/preview/orange/map-marker-2-xxl.png",
-            width: "30px",
-            height: "30px"
+            url: chooseIcon(data[i].business_category), 
+            width: "40px",
+            height: "40px"
         };
 
         var poiAttributes = {
@@ -90,17 +117,35 @@ require([
   "esri/Map",
   "esri/views/MapView",
   "esri/Graphic",
+  "esri/widgets/BasemapGallery",
+  "esri/widgets/Expand",
   "dojo/domReady!"
 ], 
-function(Map, MapView, Graphic) {
+function(Map, MapView, Graphic, BasemapGallery, Expand) {
   var map = new Map({
-    basemap: "streets"
+    basemap: "topo"
   });
   
   var view = new MapView({
     container: "viewDiv",
-    zoom: 15,
+    zoom: 16,
     map: map
+  });
+
+  
+
+  var basemapGallery = new BasemapGallery({
+    view: view
+  });
+
+  var expand = new Expand({
+    view: view,
+    content: basemapGallery,
+    expandIconClass: "esri-icon-basemap",
+  });
+
+  view.ui.add(expand, {
+    position: "top-right"
   });
   
   // Decode the search query from the URL
@@ -119,9 +164,9 @@ function(Map, MapView, Graphic) {
     
     var iconGeo = {
       type: "picture-marker",
-      url: "https://image.ibb.co/fZppUJ/Marker.png",
-      width: "50px",
-      height: "50px"
+      url: "https://image.ibb.co/jtFLMy/Marker.png",
+      width: "100px",
+      height: "100px"
     };
 
     var iconGraphic = new Graphic({
@@ -138,9 +183,9 @@ function(Map, MapView, Graphic) {
     var url = 'https://search.onboard-apis.com/poisearch/v2.0.0/poi/point?'
     + $.param({
         Point: pointString,
-        SearchDistance: '50',
-        BusinessCategory: 'EATING - DRINKING',
-        RecordLimit: '30'
+        SearchDistance: '5',
+        BusinessCategory: 'EATING - DRINKING|EDUCATION|ATTRACTIONS - RECREATION|HEALTH CARE SERVICES|SHOPPING|TRAVEL|PERSONAL SERVICES',
+        RecordLimit: '50'
     });
 
     var xmlHttp = new XMLHttpRequest();
@@ -156,7 +201,6 @@ function(Map, MapView, Graphic) {
     xmlHttp.open("GET", url, true);
     xmlHttp.setRequestHeader('apikey', '9d078487e223b1c4d54c3f3a3f628803');
     xmlHttp.setRequestHeader('accept', 'application/json');
-
     xmlHttp.send(null);
 
     // Get quality of life metrics from Teleport API 
@@ -174,6 +218,19 @@ function(Map, MapView, Graphic) {
 
     teleHttp.open("GET", teleportURL, true);
     teleHttp.send(null);
+
+    var arcURL = 'http://geoenrich.arcgis.com/arcgis/rest/services/World/geoenrichmentserver/Geoenrichment/Enrich?studyareas=[{%22address%22:{%22text%22:%222119%20Brookhaven%20Ave.,%20Placentia,%20CA%2092870%22,%22sourceCountry%22:%22US%22},%22areaType%22:%22RingBuffer%22,%22bufferUnits%22:%22esriMiles%22,%22bufferRadii%22:[5]}]&analysisvariables=[%225yearincrements.MEDAGE_CY%22,%22Wealth.AVGHINC_CY%22,%22homevalue.AVGVAL_CY%22,%22education.X11002_A%22,%22food.X1054_A%22,%20%22TravelCEX.X7003_A%22,%22transportation.X6061_A%22,%22entertainment.X9001_A%22,%22entertainment.X9008_A%22,%22transportation.X6011_A%22,%22LandscapeFacts.NLCDDevPt%22,%22Health.X8002_X%22]&addDerivativeVariables=index&f=pjson&token=ZxXmJKyPBLhcq2dwLYuQCbRs4y6XH54tw6vK_v2jkT7rO2rSxWseUWfzIppj8dFS3gUuTee2ZXCgFFjoTShivgLcXdbMRxM65qSDRsliBjWJPtHy1fTzIHelstbfJKNgLZkdcu7eUgDVarw6D6PPqQ..';
+
+    var arcHttp = new XMLHttpRequest();
+
+    arcHttp.onreadystatechange = function() {
+      if (arcHttp.readyState == 4 && arcHttp.status == 200) {
+        console.log(JSON.parse(arcHttp.responseText));
+      }
+    }
+
+    arcHttp.open("GET", arcURL, true);
+    arcHttp.send(null);
 
   }, 2000);
 });
