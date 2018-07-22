@@ -65,6 +65,7 @@ function chooseIcon(category) {
 function plotOnboardPOIs(data, Graphic, view) {
 
     for(var i = 0; i < data.length; i++) {
+        console.log(data[i]);
         var lat = data[i].geo_latitude;
         var lng = data[i].geo_longitude;
 
@@ -195,7 +196,7 @@ function(Map, MapView, Graphic, BasemapGallery, Expand) {
         Point: pointString,
         SearchDistance: '5',
         BusinessCategory: 'EATING - DRINKING|EDUCATION|ATTRACTIONS - RECREATION|HEALTH CARE SERVICES|SHOPPING|TRAVEL|PERSONAL SERVICES',
-        RecordLimit: '50'
+        RecordLimit: '1000'
     });
 
     var xmlHttp = new XMLHttpRequest();
@@ -328,10 +329,13 @@ function(Map, MapView, Graphic, BasemapGallery, Expand) {
           averageSports: arcData.X9008_A_I,
           averageGas: arcData.X6011_A_I,
           percentDeveloped: arcData.NLCDDevPt
-        }
+        };
 
-
-
+        view.popup.open({
+          title: 'Data Indexes for ' + searchQuery,
+          content: "Some string",
+          visible: true
+        });
       }
     }
 
