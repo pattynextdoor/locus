@@ -113,6 +113,18 @@ function plotOnboardPOIs(data, Graphic, view) {
 
 }
 
+function colorScore(el, score) {
+  if (score < 4) {
+    el.style.color = 'red';
+  }
+  else if (score > 6) {
+    el.style.color = 'green';
+  }
+  else {
+    el.style.color = '#F68657';
+  }
+}
+
 require([
   "esri/Map",
   "esri/views/MapView",
@@ -131,9 +143,7 @@ function(Map, MapView, Graphic, BasemapGallery, Expand) {
     zoom: 16,
     map: map
   });
-
   
-
   var basemapGallery = new BasemapGallery({
     view: view
   });
@@ -224,15 +234,47 @@ function(Map, MapView, Graphic, BasemapGallery, Expand) {
                 var qolData = (JSON.parse(teleHttp3.responseText));
                 console.log(qolData.categories);
 
-                var envQuality = qolData.categories[10].score_out_of_10;
+                var envQuality = qolData.categories[10].score_out_of_10.toFixed(2);
               
                 var envEl = document.getElementById("envQuality");
                 envEl.textContent = envQuality;
 
-                var taxQuality = qolData.categories[12].score_out_of_10;
+                colorScore(envEl, envQuality);
+
+                var taxQuality = qolData.categories[12].score_out_of_10.toFixed(2);
 
                 var taxEl = document.getElementById("taxQuality");
                 taxEl.textContent = taxQuality;
+
+                colorScore(taxEl, taxQuality);
+
+                var costLiving = qolData.categories[1].score_out_of_10.toFixed(2);
+
+                var colEl = document.getElementById("costLiving");
+                colEl.textContent = costLiving;
+
+                colorScore(colEl, costLiving);
+
+                var commute = qolData.categories[5].score_out_of_10.toFixed(2);
+
+                var commEl = document.getElementById("commute");
+                commEl.textContent = commute;
+
+                colorScore(commEl, commute);
+
+                var safety = qolData.categories[7].score_out_of_10.toFixed(2);
+
+                var safeEl = document.getElementById("safety");
+                safeEl.textContent = safety;
+
+                colorScore(safeEl, safety);
+
+                var intAccess = qolData.categories[13].score_out_of_10.toFixed(2);
+
+                var intEl = document.getElementById("intAccess");
+                intEl.textContent = intAccess;
+
+                colorScore(intEl, intAccess);
 
                 qolData = qolData.summary;
                 var parser = new DOMParser();
@@ -263,13 +305,33 @@ function(Map, MapView, Graphic, BasemapGallery, Expand) {
     teleHttp.open("GET", teleportURL, true);
     teleHttp.send(null);
 
-    var arcURL = 'http://geoenrich.arcgis.com/arcgis/rest/services/World/geoenrichmentserver/Geoenrichment/Enrich?studyareas=[{%22address%22:{%22text%22:%222119%20Brookhaven%20Ave.,%20Placentia,%20CA%2092870%22,%22sourceCountry%22:%22US%22},%22areaType%22:%22RingBuffer%22,%22bufferUnits%22:%22esriMiles%22,%22bufferRadii%22:[5]}]&analysisvariables=[%225yearincrements.MEDAGE_CY%22,%22Wealth.AVGHINC_CY%22,%22homevalue.AVGVAL_CY%22,%22education.X11002_A%22,%22food.X1054_A%22,%20%22TravelCEX.X7003_A%22,%22transportation.X6061_A%22,%22entertainment.X9001_A%22,%22entertainment.X9008_A%22,%22transportation.X6011_A%22,%22LandscapeFacts.NLCDDevPt%22,%22Health.X8002_X%22]&addDerivativeVariables=index&f=pjson&token=ZxXmJKyPBLhcq2dwLYuQCbRs4y6XH54tw6vK_v2jkT7rO2rSxWseUWfzIppj8dFS3gUuTee2ZXCgFFjoTShivgLcXdbMRxM65qSDRsliBjWJPtHy1fTzIHelstbfJKNgLZkdcu7eUgDVarw6D6PPqQ..';
+    var arcURL = 'http://geoenrich.arcgis.com/arcgis/rest/services/World/geoenrichmentserver/Geoenrichment/Enrich?studyareas=[{%22address%22:{%22text%22:%222119%20Brookhaven%20Ave.,%20Placentia,%20CA%2092870%22,%22sourceCountry%22:%22US%22},%22areaType%22:%22RingBuffer%22,%22bufferUnits%22:%22esriMiles%22,%22bufferRadii%22:[5]}]&analysisvariables=[%225yearincrements.MEDAGE_CY%22,%22Wealth.AVGHINC_CY%22,%22homevalue.AVGVAL_CY%22,%22education.X11002_A%22,%22food.X1054_A%22,%20%22TravelCEX.X7003_A%22,%22transportation.X6061_A%22,%22entertainment.X9001_A%22,%22entertainment.X9008_A%22,%22transportation.X6011_A%22,%22LandscapeFacts.NLCDDevPt%22,%22HealthPersonalCareCEX.X8002_A%22]&addDerivativeVariables=index&f=pjson&token=R8xnrOVApJU_EfWKh6GEYcBUmABc8688owrtSxM3V--VVe1fYqQNu2opGhlNPJLXOxBbYQDzuUeVVibSAfXDBWoKaFJqKrjC6ZOpQKYrFo495XOrGG2xrhK0iiWvUU57KFd4bd5EH40H1QXd9rsi_g..';
 
     var arcHttp = new XMLHttpRequest();
 
     arcHttp.onreadystatechange = function() {
       if (arcHttp.readyState == 4 && arcHttp.status == 200) {
-        console.log(JSON.parse(arcHttp.responseText));
+        var arcData = JSON.parse(arcHttp.responseText);
+
+        arcData = arcData.results[0].value.FeatureSet[0].features[0].attributes;
+        console.log(arcData);
+
+        var arcAttributes = {
+          medianAge: arcData.MEDAGE_CY,
+          averageHouseholdIncome: arcData.AVGHINC_CY,
+          averageHomeValue: arcData.AVGVAL_CY,
+          averageCollegeTuition: arcData.X11002_A_I,
+          averageMilk: arcData.X1054_A_I,
+          averageAirline: arcData.X7003_A_I,
+          averageTransit: arcData.X6061_A_I,
+          averageEnt: arcData.X9001_A_I,
+          averageSports: arcData.X9008_A_I,
+          averageGas: arcData.X6011_A_I,
+          percentDeveloped: arcData.NLCDDevPt
+        }
+
+
+
       }
     }
 
