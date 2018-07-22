@@ -3,10 +3,7 @@ html, body, #viewDiv {
     margin: 0;
     height: 80%;
     width: 100%;
-}
-
-#viewDiv {
-  border-top: 3px solid #f9320c;
+    font-family: 'Lato', serif;
 }
 
 .bottom-sec {
@@ -23,10 +20,23 @@ h1 {
   padding-top: 2%;
 
   text-shadow: none;
+  font-family: 'Lato', sans-serif;
+}
+
+#subtitle {
+  color: grey;
+  font-size: 30px;
+  font-family: 'Lato', sans-serif;
+}
+
+#score {
+  font-size: 3em;
+  font-family: 'Lato', sans-serif;
 }
 
 h2 {
   text-align: center;
+  font-family: 'Lato', sans-serif;
 }
 
 .content {
@@ -34,7 +44,7 @@ h2 {
 }
 
 #teleport {
-  font-size: 1.2em;
+  font-size: 2rem;
 }
 
 ul {
@@ -44,6 +54,15 @@ ul {
 
 li {
   padding-right: 50%;
+}
+
+li>p {
+  font-size: 20px;
+  font-weight: 800;
+}
+
+#qol-how {
+  font-size: 2rem;
 }
 
 .qol {

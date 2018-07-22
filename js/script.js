@@ -65,7 +65,6 @@ function chooseIcon(category) {
 function plotOnboardPOIs(data, Graphic, view) {
 
     for(var i = 0; i < data.length; i++) {
-        console.log(data[i]);
         var lat = data[i].geo_latitude;
         var lng = data[i].geo_longitude;
 
@@ -124,6 +123,45 @@ function colorScore(el, score) {
   else {
     el.style.color = '#F68657';
   }
+}
+
+function binIndex(index) {
+  console.log(index);
+  console.log(typeof(index));
+  if (index >= 115) {
+    return 0;
+  }
+  else if (index >= 105 && index <= 114) {
+    return 2.5;
+  }
+  else if (index >= 95 && index <= 104) {
+    return 5;
+  }
+  else if (index >= 85 && index <= 94) {
+    return 7.5;
+  }
+  else {
+    return 10;
+  }
+}
+
+function computeScore(arcData, teleData) {
+  var sum = 0;
+  for (var i = 0; i < teleData.length; i++) {
+    sum += parseInt(teleData[i]);
+    console.log(sum);
+  }
+
+  sum += binIndex(parseInt(arcData.averageCollegeTuition));
+  sum += binIndex(parseInt(arcData.averageMilk));
+  sum += binIndex(parseInt(arcData.averageAirline));
+  sum += binIndex(parseInt(arcData.averageTransit));
+  sum += binIndex(parseInt(arcData.averageEnt));
+  sum += binIndex(parseInt(arcData.averageSports));
+  sum += binIndex(parseInt(arcData.averageGas));
+  console.log(sum);
+
+  return sum / 13;
 }
 
 require([
@@ -196,7 +234,7 @@ function(Map, MapView, Graphic, BasemapGallery, Expand) {
         Point: pointString,
         SearchDistance: '5',
         BusinessCategory: 'EATING - DRINKING|EDUCATION|ATTRACTIONS - RECREATION|HEALTH CARE SERVICES|SHOPPING|TRAVEL|PERSONAL SERVICES',
-        RecordLimit: '1000'
+        RecordLimit: '600'
     });
 
     var xmlHttp = new XMLHttpRequest();
@@ -213,6 +251,8 @@ function(Map, MapView, Graphic, BasemapGallery, Expand) {
     xmlHttp.setRequestHeader('apikey', '9d078487e223b1c4d54c3f3a3f628803');
     xmlHttp.setRequestHeader('accept', 'application/json');
     xmlHttp.send(null);
+
+    var qolArr = [];
 
     // Get quality of life metrics from Teleport API 
     var teleHttp = new XMLHttpRequest();
@@ -233,7 +273,6 @@ function(Map, MapView, Graphic, BasemapGallery, Expand) {
             teleHttp3.onreadystatechange = function() {
               if (teleHttp3.readyState == 4 && teleHttp3.status == 200) {
                 var qolData = (JSON.parse(teleHttp3.responseText));
-                console.log(qolData.categories);
 
                 var envQuality = qolData.categories[10].score_out_of_10.toFixed(2);
               
@@ -241,6 +280,7 @@ function(Map, MapView, Graphic, BasemapGallery, Expand) {
                 envEl.textContent = envQuality;
 
                 colorScore(envEl, envQuality);
+                qolArr.push(envQuality);
 
                 var taxQuality = qolData.categories[12].score_out_of_10.toFixed(2);
 
@@ -248,6 +288,7 @@ function(Map, MapView, Graphic, BasemapGallery, Expand) {
                 taxEl.textContent = taxQuality;
 
                 colorScore(taxEl, taxQuality);
+                qolArr.push(taxQuality);
 
                 var costLiving = qolData.categories[1].score_out_of_10.toFixed(2);
 
@@ -255,6 +296,7 @@ function(Map, MapView, Graphic, BasemapGallery, Expand) {
                 colEl.textContent = costLiving;
 
                 colorScore(colEl, costLiving);
+                qolArr.push(costLiving);
 
                 var commute = qolData.categories[5].score_out_of_10.toFixed(2);
 
@@ -262,6 +304,7 @@ function(Map, MapView, Graphic, BasemapGallery, Expand) {
                 commEl.textContent = commute;
 
                 colorScore(commEl, commute);
+                qolArr.push(commute);
 
                 var safety = qolData.categories[7].score_out_of_10.toFixed(2);
 
@@ -269,6 +312,7 @@ function(Map, MapView, Graphic, BasemapGallery, Expand) {
                 safeEl.textContent = safety;
 
                 colorScore(safeEl, safety);
+                qolArr.push(safety);
 
                 var intAccess = qolData.categories[13].score_out_of_10.toFixed(2);
 
@@ -276,6 +320,7 @@ function(Map, MapView, Graphic, BasemapGallery, Expand) {
                 intEl.textContent = intAccess;
 
                 colorScore(intEl, intAccess);
+                qolArr.push(intAccess);
 
                 qolData = qolData.summary;
                 var parser = new DOMParser();
@@ -306,7 +351,7 @@ function(Map, MapView, Graphic, BasemapGallery, Expand) {
     teleHttp.open("GET", teleportURL, true);
     teleHttp.send(null);
 
-    var arcURL = 'http://geoenrich.arcgis.com/arcgis/rest/services/World/geoenrichmentserver/Geoenrichment/Enrich?studyareas=[{%22address%22:{%22text%22:%222119%20Brookhaven%20Ave.,%20Placentia,%20CA%2092870%22,%22sourceCountry%22:%22US%22},%22areaType%22:%22RingBuffer%22,%22bufferUnits%22:%22esriMiles%22,%22bufferRadii%22:[5]}]&analysisvariables=[%225yearincrements.MEDAGE_CY%22,%22Wealth.AVGHINC_CY%22,%22homevalue.AVGVAL_CY%22,%22education.X11002_A%22,%22food.X1054_A%22,%20%22TravelCEX.X7003_A%22,%22transportation.X6061_A%22,%22entertainment.X9001_A%22,%22entertainment.X9008_A%22,%22transportation.X6011_A%22,%22LandscapeFacts.NLCDDevPt%22,%22HealthPersonalCareCEX.X8002_A%22]&addDerivativeVariables=index&f=pjson&token=R8xnrOVApJU_EfWKh6GEYcBUmABc8688owrtSxM3V--VVe1fYqQNu2opGhlNPJLXOxBbYQDzuUeVVibSAfXDBWoKaFJqKrjC6ZOpQKYrFo495XOrGG2xrhK0iiWvUU57KFd4bd5EH40H1QXd9rsi_g..';
+    var arcURL = 'http://geoenrich.arcgis.com/arcgis/rest/services/World/geoenrichmentserver/Geoenrichment/Enrich?studyareas=[{%22address%22:{%22text%22:%222119%20Brookhaven%20Ave.,%20Placentia,%20CA%2092870%22,%22sourceCountry%22:%22US%22},%22areaType%22:%22RingBuffer%22,%22bufferUnits%22:%22esriMiles%22,%22bufferRadii%22:[5]}]&analysisvariables=[%225yearincrements.MEDAGE_CY%22,%22Wealth.AVGHINC_CY%22,%22homevalue.AVGVAL_CY%22,%22education.X11002_A%22,%22food.X1054_A%22,%20%22TravelCEX.X7003_A%22,%22transportation.X6061_A%22,%22entertainment.X9001_A%22,%22entertainment.X9008_A%22,%22transportation.X6011_A%22,%22LandscapeFacts.NLCDDevPt%22,%22HealthPersonalCareCEX.X8002_A%22]&addDerivativeVariables=index&f=pjson&token=7RTCQdjL8vIj-T-4uo36OVTcU9og1hHV2md7RqEUmFR7fGV6EP-_FCfMnZgZIz3JmCAQNo2u_k15AouIzWBTS4kZW2g_GtjqdvLEtdojM7tymPODeHp9zx_kXaVZt8TGsiRFLFJJkOf-c2-0YPptFw..';
 
     var arcHttp = new XMLHttpRequest();
 
@@ -330,6 +375,12 @@ function(Map, MapView, Graphic, BasemapGallery, Expand) {
           averageGas: arcData.X6011_A_I,
           percentDeveloped: arcData.NLCDDevPt
         };
+
+        var score = computeScore(arcAttributes, qolArr);
+        console.log(score);
+
+        var scoreEl = document.getElementById('score');
+        scoreEl.textContent = score;
 
         view.popup.open({
           title: 'Data Indexes for ' + searchQuery,
