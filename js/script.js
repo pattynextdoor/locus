@@ -173,9 +173,10 @@ function computeScore(arcData, teleData) {
   sum += binIndex(parseInt(arcData.averageEnt));
   sum += binIndex(parseInt(arcData.averageSports));
   sum += binIndex(parseInt(arcData.averageGas));
+  sum += binIndex(parseInt(arcData.averageHealthIns));
   console.log(sum);
 
-  return (sum / 13).toFixed(1);
+  return (sum / 14).toFixed(1);
 }
 
 function createDataEl(obj) {
@@ -188,6 +189,7 @@ function createDataEl(obj) {
     "Average College Tuition Spending Index",
     "Average Milk Spending Index",
     "Average Airline Fare Index",
+    "Average Gas Spending Index",
     "Average Mass Transit Fare Index",
     "Average Recreational Spending Index",
     "Average Sporting Events Admission Index",
@@ -488,6 +490,7 @@ function(Map, MapView, Graphic, BasemapGallery, Expand, FeatureLayer) {
           averageEnt: arcData.X9001_A_I,
           averageSports: arcData.X9008_A_I,
           averageGas: arcData.X6011_A_I,
+          averageHealthIns: arcData.X8002_A_I,
           percentDeveloped: arcData.NLCDDevPt
         };
 
