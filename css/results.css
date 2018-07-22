@@ -47,12 +47,12 @@ h2 {
   font-size: 2rem;
 }
 
-ul {
+.qol-ul {
   list-style-type: none;
   text-align: right;
 }
 
-li {
+.qol-li {
   padding-right: 50%;
 }
 

@@ -161,7 +161,41 @@ function computeScore(arcData, teleData) {
   sum += binIndex(parseInt(arcData.averageGas));
   console.log(sum);
 
-  return sum / 13;
+  return (sum / 13).toFixed(1);
+}
+
+function createDataEl(obj) {
+  var vals = (Object.values(obj));
+
+  var labels = [
+    "Median Age",
+    "Average Household Income",
+    "Average Home Value",
+    "Average College Tuition Spending Index",
+    "Average Milk Price Spending Index",
+    "Average Airline Fare Index",
+    "Average Mass Transit Fare Index",
+    "Average Recreational Spending Index",
+    "Average Sports Events Admission Index",
+    "Average Health Insurance Index",
+    "Average % of Land Developed"
+  ];
+
+  console.log(vals);
+  console.log(labels);
+
+  var mainUl = document.createElement("ul");
+
+  for (var i = 0; i < labels.length; i++) {
+    var li = document.createElement("li");
+    var attrContent = document.createTextNode(labels[i] + ': ' + vals[i]);
+
+    li.appendChild(attrContent);
+    mainUl.appendChild(li);
+  }
+
+  return mainUl;
+
 }
 
 require([
@@ -173,6 +207,29 @@ require([
   "dojo/domReady!"
 ], 
 function(Map, MapView, Graphic, BasemapGallery, Expand) {
+
+  var data = new FormData();
+  data.append("client_id", "vUpwFeNyvwBFj9Q5");
+  data.append("client_secret", "1cca913145a24b41972aa6ac0538e1f9");
+  data.append("grant_type", "client_credentials");
+  data.append("expiration", "20160");
+
+  var xhr = new XMLHttpRequest();
+  xhr.withCredentials = true;
+
+  xhr.addEventListener("readystatechange", function () {
+    if (this.readyState === 4) {
+      console.log(this.responseText);
+    }
+  });
+
+  xhr.open("POST", "https://www.arcgis.com/sharing/rest/oauth2/token");
+  xhr.setRequestHeader("Cache-Control", "no-cache");
+  xhr.setRequestHeader("Postman-Token", "41a9df42-dd85-46c5-9bd4-d61a94355d79");
+
+  xhr.send(data);
+
+
   var map = new Map({
     basemap: "topo"
   });
@@ -351,7 +408,10 @@ function(Map, MapView, Graphic, BasemapGallery, Expand) {
     teleHttp.open("GET", teleportURL, true);
     teleHttp.send(null);
 
-    var arcURL = 'http://geoenrich.arcgis.com/arcgis/rest/services/World/geoenrichmentserver/Geoenrichment/Enrich?studyareas=[{%22address%22:{%22text%22:%222119%20Brookhaven%20Ave.,%20Placentia,%20CA%2092870%22,%22sourceCountry%22:%22US%22},%22areaType%22:%22RingBuffer%22,%22bufferUnits%22:%22esriMiles%22,%22bufferRadii%22:[5]}]&analysisvariables=[%225yearincrements.MEDAGE_CY%22,%22Wealth.AVGHINC_CY%22,%22homevalue.AVGVAL_CY%22,%22education.X11002_A%22,%22food.X1054_A%22,%20%22TravelCEX.X7003_A%22,%22transportation.X6061_A%22,%22entertainment.X9001_A%22,%22entertainment.X9008_A%22,%22transportation.X6011_A%22,%22LandscapeFacts.NLCDDevPt%22,%22HealthPersonalCareCEX.X8002_A%22]&addDerivativeVariables=index&f=pjson&token=7RTCQdjL8vIj-T-4uo36OVTcU9og1hHV2md7RqEUmFR7fGV6EP-_FCfMnZgZIz3JmCAQNo2u_k15AouIzWBTS4kZW2g_GtjqdvLEtdojM7tymPODeHp9zx_kXaVZt8TGsiRFLFJJkOf-c2-0YPptFw..';
+    var arcURL = 'http://geoenrich.arcgis.com/arcgis/rest/services/World/geoenrichmentserver/Geoenrichment/Enrich?studyareas=[{%22address%22:{%22text%22:%22'
+    + encodeURIComponent(searchQuery)
+    + '%22,%22sourceCountry%22:%22US%22},%22areaType%22:%22RingBuffer%22,%22bufferUnits%22:%22esriMiles%22,%22bufferRadii%22:[5]}]&analysisvariables=[%225yearincrements.MEDAGE_CY%22,%22Wealth.AVGHINC_CY%22,%22homevalue.AVGVAL_CY%22,%22education.X11002_A%22,%22food.X1054_A%22,%20%22TravelCEX.X7003_A%22,%22transportation.X6061_A%22,%22entertainment.X9001_A%22,%22entertainment.X9008_A%22,%22transportation.X6011_A%22,%22LandscapeFacts.NLCDDevPt%22,%22HealthPersonalCareCEX.X8002_A%22]&addDerivativeVariables=index&f=pjson&token='
+    +'gAUpB8lWvoyGMTlHd-rDGmpgJaBMm36jMk-4HiBwaGbMxVdHjqFKaNC2bsCL84RtRVoBkW7tso2LQs4GixZOzz1rdCYE526N0xQsFpuQLUMp_KziUZOskAH0ygoGTEX7MJur1ADaJGM19mNWwHAuWw..';
 
     var arcHttp = new XMLHttpRequest();
 
@@ -382,9 +442,11 @@ function(Map, MapView, Graphic, BasemapGallery, Expand) {
         var scoreEl = document.getElementById('score');
         scoreEl.textContent = score;
 
+        var dataEl = createDataEl(arcAttributes);
+
         view.popup.open({
-          title: 'Data Indexes for ' + searchQuery,
-          content: "Some string",
+          title: 'Area Data Indexes',
+          content: dataEl,
           visible: true
         });
       }
