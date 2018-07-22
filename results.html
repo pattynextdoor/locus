@@ -7,6 +7,8 @@
     <title>Results</title>
     <link rel="stylesheet" href="https://js.arcgis.com/4.8/esri/css/main.css">
     <script src="https://js.arcgis.com/4.8/"></script>
+    <link href="https://fonts.googleapis.com/css?family=Lato|Merriweather" rel="stylesheet"> 
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/hover.css/2.3.1/css/hover.css"/>
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.1/css/all.css" integrity="sha384-O8whS3fhG2OnA5Kas0Y9l3cfpmYjapjI0E4theH4iuMD+pLhbf6JI0jIMfYcK3yZ" crossorigin="anonymous">
     <link rel="stylesheet" href="https://unpkg.com/wingcss"/>
     <link rel="stylesheet" href="css/results.css">
@@ -15,18 +17,21 @@
     <div id="viewDiv"></div>
 
     <div class="bottom-sec">
-      <h1>Locus Score: <span id="score">0</span></h1>
+      <h1><span id="score" class="hvr-float-shadow">...</span></h1>
+      <h2 id="subtitle">Locus-Curated Community Score</h2>
 
       <div class="row">
         <div class="col">
           <h2>County Summary</h2>
           <div class="content">
             <span id="teleport"></span>
+            <h2>How are these scores calculated?</h2>
+            <p id="qol-how">The <a href="https://developers.teleport.org/api/">Teleport API</a> aggregates data from the <a href="">GeoNames</a> geographical database and computes quality of life scores for cities across various different categories. <br><br> 
+              The Locus-Curated Community Score leverages over 12 factors from both Teleport's data and <a href="https://doc.arcgis.com/en/esri-demographics/">Esri Demographics</a> to deliver an aggregate score.</p> 
           </div>
         </div>
         <div class="col">
           <h2>Quality of Life Metrics</h2>
-
           <div class="row">
             <div class="col">
               <ul>
