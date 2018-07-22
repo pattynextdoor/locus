@@ -12,6 +12,12 @@
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.1/css/all.css" integrity="sha384-O8whS3fhG2OnA5Kas0Y9l3cfpmYjapjI0E4theH4iuMD+pLhbf6JI0jIMfYcK3yZ" crossorigin="anonymous">
     <link rel="stylesheet" href="https://unpkg.com/wingcss"/>
     <link rel="stylesheet" href="css/results.css">
+
+        <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBHYKZKxdyj4Uns3fqhRGZHr8pUOgl8maQ"
+                        type="text/javascript"></script>
+    <script src="js/script.js"></script>
+    <script src="js/handlers.js"></script>
 </head>
 <body>
     <div id="viewDiv"></div>
@@ -22,6 +28,7 @@
 
       <div class="row">
         <div class="col">
+          <img id="legend" src="img/legend.PNG" alt="Map legend">
           <h2>County Summary</h2>
           <div class="content">
             <span id="teleport"></span>
@@ -36,26 +43,38 @@
             <div class="col">
               <ul class="qol-ul">
                 <li class="qol-li">
-                  <p>Environmental Quality: <span class="qol" id="envQuality"></span>/10</p>
+                  Toggle EQ<input type="checkbox" id="myCheck" onclick="chk()">
+                  <p id = "eqhide" style="display:block">Environmental Quality:<span class="qol" id="envQuality"></span>/10
+                  </p>
+                  
                 </li>
                 <li class="qol-li">
-                  <p>Commute: <br><br> <span class="qol" id="commute"></span>/10</p>
+                  Toggle Commute<input type="checkbox" id="commCheck" onclick="commchk()">
+                  <p id = "commhide" style="display:block">Commute: <br><br> <span class="qol" id="commute"></span>/10</p>
+                  
                 </li>
                 <li class="qol-li">
-                  <p>Safety: <br> <span class="qol" id="safety"></span>/10</p>
+                  Toggle Safety<input type="checkbox" id="safeCheck" onclick="safechk()">
+                  <p id = "safehide" style="display:block">Safety: <br> <span class="qol" id="safety"></span>/10</p>
+                  
                 </li>
               </ul>
             </div>
             <div class="col">
               <ul class="qol-ul">
                 <li class="qol-li">
-                  <p>Taxation: <br><br> <span class="qol" id="taxQuality"></span>/10</p>
+                  Toggle Taxation<input type="checkbox" id="taxCheck" onclick="taxchk()">
+                  <p id = "taxhide" style="display:block">Taxation: <br><br> <span class="qol" id="taxQuality"></span>/10</p>
+                 
                 </li>
                 <li class="qol-li">
-                  <p>Cost of Living: <span class="qol" id="costLiving"></span>/10</p>
+                  Toggle CoL<input type="checkbox" id="colCheck" onclick="colchk()">
+                  <p id = "colhide" style="display:block">Cost of Living: <span class="qol" id="costLiving"></span>/10</p>
+                  
                 </li>
                 <li class="qol-li">
-                  <p>Public Internet Access: <span class="qol" id="intAccess"></span>/10</p>
+                  Toggle Internet Access<input type="checkbox" id="intCheck" onclick="intchk()">
+                  <p id = "inthide" style="display:block">Public Internet Access: <span class="qol" id="intAccess"></span>/10</p>
                 </li>
               </ul>
             </div>
@@ -64,11 +83,5 @@
       </div>
 
     </div>
-
-    
-    <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
-    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBHYKZKxdyj4Uns3fqhRGZHr8pUOgl8maQ"
-                        type="text/javascript"></script>
-    <script src="js/script.js"></script>
 </body>
 </html>

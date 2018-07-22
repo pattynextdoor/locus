@@ -146,8 +146,22 @@ function binIndex(index) {
 }
 
 function computeScore(arcData, teleData) {
+  var teleIDs = [
+    "myCheck",
+    "commCheck",
+    "safeCheck",
+    "taxCheck",
+    "colCheck",
+    "intCheck"
+  ];
+
   var sum = 0;
   for (var i = 0; i < teleData.length; i++) {
+    var checkBox = document.getElementById(teleIDs[i]);
+    if(checkBox.checked) {
+      console.log("Box is checked");
+      continue;
+    }
     sum += parseInt(teleData[i]);
     console.log(sum);
   }
@@ -172,13 +186,13 @@ function createDataEl(obj) {
     "Average Household Income",
     "Average Home Value",
     "Average College Tuition Spending Index",
-    "Average Milk Price Spending Index",
+    "Average Milk Spending Index",
     "Average Airline Fare Index",
     "Average Mass Transit Fare Index",
     "Average Recreational Spending Index",
-    "Average Sports Events Admission Index",
+    "Average Sporting Events Admission Index",
     "Average Health Insurance Index",
-    "Average % of Land Developed"
+    "% of Land Developed"
   ];
 
   console.log(vals);
@@ -198,37 +212,76 @@ function createDataEl(obj) {
 
 }
 
+function chk() {
+                    var checkBox = document.getElementById("myCheck");
+                    var eqhide = document.getElementById("eqhide");
+                    if (checkBox.checked == true){
+                      eqhide.style.display = "none";
+                    } else {
+                      eqhide.style.display = "block";
+                    }
+                  }
+
+function commchk() {
+                    var checkBox2 = document.getElementById("commCheck");
+                    var commhide = document.getElementById("commhide");
+                    if (checkBox2.checked == true){
+                      commhide.style.display = "none";
+                    } else {
+                      commhide.style.display = "block";
+                    }
+                  }
+
+ function safechk() {
+                    var checkBox3 = document.getElementById("safeCheck");
+                    var safehide = document.getElementById("safehide");
+                    if (checkBox3.checked == true){
+                      safehide.style.display = "none";
+                    } else {
+                      safehide.style.display = "block";
+                    }
+                  }
+
+function taxchk() {
+                    var checkBox4 = document.getElementById("taxCheck");
+                    var taxhide = document.getElementById("taxhide");
+                    if (checkBox4.checked == true){
+                      taxhide.style.display = "none";
+                    } else {
+                      taxhide.style.display = "block";
+                    }
+                  }
+
+function colchk() {
+                    var checkBox5 = document.getElementById("colCheck");
+                    var colhide = document.getElementById("colhide");
+                    if (checkBox5.checked == true){
+                      colhide.style.display = "none";
+                    } else {
+                      colhide.style.display = "block";
+                    }
+                  }
+
+function intchk() {
+                    var checkBox6 = document.getElementById("intCheck");
+                    var inthide = document.getElementById("inthide");
+                    if (checkBox6.checked == true){
+                      inthide.style.display = "none";
+                    } else {
+                      inthide.style.display = "block";
+                    }
+                  }
+
 require([
   "esri/Map",
   "esri/views/MapView",
   "esri/Graphic",
   "esri/widgets/BasemapGallery",
   "esri/widgets/Expand",
+  "esri/layers/FeatureLayer",
   "dojo/domReady!"
 ], 
-function(Map, MapView, Graphic, BasemapGallery, Expand) {
-
-  var data = new FormData();
-  data.append("client_id", "vUpwFeNyvwBFj9Q5");
-  data.append("client_secret", "1cca913145a24b41972aa6ac0538e1f9");
-  data.append("grant_type", "client_credentials");
-  data.append("expiration", "20160");
-
-  var xhr = new XMLHttpRequest();
-  xhr.withCredentials = true;
-
-  xhr.addEventListener("readystatechange", function () {
-    if (this.readyState === 4) {
-      console.log(this.responseText);
-    }
-  });
-
-  xhr.open("POST", "https://www.arcgis.com/sharing/rest/oauth2/token");
-  xhr.setRequestHeader("Cache-Control", "no-cache");
-  xhr.setRequestHeader("Postman-Token", "41a9df42-dd85-46c5-9bd4-d61a94355d79");
-
-  xhr.send(data);
-
+function(Map, MapView, Graphic, BasemapGallery, Expand, FeatureLayer) {
 
   var map = new Map({
     basemap: "topo"
@@ -410,14 +463,16 @@ function(Map, MapView, Graphic, BasemapGallery, Expand) {
 
     var arcURL = 'http://geoenrich.arcgis.com/arcgis/rest/services/World/geoenrichmentserver/Geoenrichment/Enrich?studyareas=[{%22address%22:{%22text%22:%22'
     + encodeURIComponent(searchQuery)
-    + '%22,%22sourceCountry%22:%22US%22},%22areaType%22:%22RingBuffer%22,%22bufferUnits%22:%22esriMiles%22,%22bufferRadii%22:[5]}]&analysisvariables=[%225yearincrements.MEDAGE_CY%22,%22Wealth.AVGHINC_CY%22,%22homevalue.AVGVAL_CY%22,%22education.X11002_A%22,%22food.X1054_A%22,%20%22TravelCEX.X7003_A%22,%22transportation.X6061_A%22,%22entertainment.X9001_A%22,%22entertainment.X9008_A%22,%22transportation.X6011_A%22,%22LandscapeFacts.NLCDDevPt%22,%22HealthPersonalCareCEX.X8002_A%22]&addDerivativeVariables=index&f=pjson&token='
-    +'gAUpB8lWvoyGMTlHd-rDGmpgJaBMm36jMk-4HiBwaGbMxVdHjqFKaNC2bsCL84RtRVoBkW7tso2LQs4GixZOzz1rdCYE526N0xQsFpuQLUMp_KziUZOskAH0ygoGTEX7MJur1ADaJGM19mNWwHAuWw..';
-
+    + '%22,%22sourceCountry%22:%22US%22},%22areaType%22:%22RingBuffer%22,%22bufferUnits%22:%22esriMiles%22,%22bufferRadii%22:[5]}]&analysisvariables=[%225yearincrements.MEDAGE_CY%22,%22Wealth.AVGHINC_CY%22,%22homevalue.AVGVAL_CY%22,%22education.X11002_A%22,%22food.X1054_A%22,%20%22TravelCEX.X7003_A%22,%22transportation.X6061_A%22,%22entertainment.X9001_A%22,%22entertainment.X9008_A%22,%22transportation.X6011_A%22,%22LandscapeFacts.NLCDDevPt%22,%22HealthPersonalCareCEX.X8002_A%22]&addDerivativeVariables=index&f=pjson'
+    + '&token='
+    + 'XNgd-vlD_nwoHQCBFKyycMcrx1bBKIgXGttMCIPIYBqBcWvHFDoBH5QX4JXVaD848M5ZykrKWSmJmFDxMiWGOw5QiJ9ROSg7_qhQf2LDhxqshdNtinzkM1TJqVSdIfDCZynvxUGgDIiOvzV4I-AGcg..';
+   
     var arcHttp = new XMLHttpRequest();
 
     arcHttp.onreadystatechange = function() {
       if (arcHttp.readyState == 4 && arcHttp.status == 200) {
         var arcData = JSON.parse(arcHttp.responseText);
+        console.log(arcData);
 
         arcData = arcData.results[0].value.FeatureSet[0].features[0].attributes;
         console.log(arcData);
