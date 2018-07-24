@@ -16,4 +16,6 @@ Let Locus help you out. Simply type in an address, and Locus curates points of i
 - `ArcGIS API for JavaScript 4.8`
 - `Esri GeoEnrichment`
 - `HTML/CSS/JS`
+- `Onboard Informatics API`
+- `Teleport API`
 - Blood, sweat, and hackathon food
