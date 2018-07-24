@@ -6,8 +6,14 @@ html, body, #viewDiv {
     font-family: 'Lato', serif;
 }
 
+#particles-js {
+    position: absolute;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+}
 .bottom-sec {
-  background: url('../img/memphis-colorful.png');
   letter-spacing: 1px;
 }
 
@@ -46,6 +52,7 @@ h2 {
 #legend {
   width: 50%;
   margin-left: 25%;
+  z-index: -99;
 }
 
 #teleport {
@@ -72,4 +79,11 @@ li>p {
 
 .qol {
   font-size: 3em;
+}
+
+@media screen and (max-width: 420px) {
+  #legend {
+    width: 100%;
+    margin-left: 0;
+  }
 }
