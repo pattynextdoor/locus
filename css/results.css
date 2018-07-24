@@ -86,4 +86,7 @@ li>p {
     width: 100%;
     margin-left: 0;
   }
+  .qol-li {
+    padding-right: 33%;
+  }
 }
