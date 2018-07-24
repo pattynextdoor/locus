@@ -239,16 +239,16 @@ function colorScore(el, score) {
 function binIndex(index) {
   console.log(index);
   console.log(typeof(index));
-  if (index >= 115) {
+  if (index >= 200) {
     return 0;
   }
-  else if (index >= 105 && index <= 114) {
+  else if (index >= 130 && index <= 199) {
     return 2.5;
   }
-  else if (index >= 95 && index <= 104) {
+  else if (index >= 95 && index <= 129) {
     return 5;
   }
-  else if (index >= 85 && index <= 94) {
+  else if (index >= 75 && index <= 94) {
     return 7.5;
   }
   else {
@@ -578,7 +578,7 @@ function(Map, MapView, Graphic, BasemapGallery, Expand, FeatureLayer) {
     + encodeURIComponent(searchQuery)
     + '%22,%22sourceCountry%22:%22US%22},%22areaType%22:%22RingBuffer%22,%22bufferUnits%22:%22esriMiles%22,%22bufferRadii%22:[5]}]&analysisvariables=[%225yearincrements.MEDAGE_CY%22,%22Wealth.AVGHINC_CY%22,%22homevalue.AVGVAL_CY%22,%22education.X11002_A%22,%22food.X1054_A%22,%20%22TravelCEX.X7003_A%22,%22transportation.X6061_A%22,%22entertainment.X9001_A%22,%22entertainment.X9008_A%22,%22transportation.X6011_A%22,%22LandscapeFacts.NLCDDevPt%22,%22HealthPersonalCareCEX.X8002_A%22]&addDerivativeVariables=index&f=pjson'
     + '&token='
-    + 'GP-VcgMvBXkJt2NTg_UFASqX1Wg1oZsMw0bljYHEzGAArJUaH2sLHe8mtC27mcpYw7LISykSAHRMd3nkJ88kIzzDCPkWQa65_QkgGa4bLnxPqdZhuWUkBrJXE2ScYalAjftaDk64Q29pEIzfTKTaeQ..';
+    + 'HMpAHGm-7bqzgttKy0pFUjcVCkqvLH-Ce5fgfsq4wI5Qy-OepoWE7-OOmTZlLp78v3Urc-oUK8Zq828wvlXqFDYudYe-NhBgA_Sgm-VmBNBUAoJH1VF3sHbTmI1HLfBmr5Y5ikLE1M5DPsspDYYv_g..';
    
     var arcHttp = new XMLHttpRequest();
 
@@ -616,8 +616,13 @@ function(Map, MapView, Graphic, BasemapGallery, Expand, FeatureLayer) {
         view.popup.open({
           title: 'Area Data Indexes',
           content: dataEl,
-          visible: true
+          visible: true,
+          dockOptions: {
+            position: 'bottom-right'
+          }
         });
+
+        view.popup.dockEnabled = true;
       }
     }
 
