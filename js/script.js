@@ -578,7 +578,7 @@ function(Map, MapView, Graphic, BasemapGallery, Expand, FeatureLayer) {
     + encodeURIComponent(searchQuery)
     + '%22,%22sourceCountry%22:%22US%22},%22areaType%22:%22RingBuffer%22,%22bufferUnits%22:%22esriMiles%22,%22bufferRadii%22:[5]}]&analysisvariables=[%225yearincrements.MEDAGE_CY%22,%22Wealth.AVGHINC_CY%22,%22homevalue.AVGVAL_CY%22,%22education.X11002_A%22,%22food.X1054_A%22,%20%22TravelCEX.X7003_A%22,%22transportation.X6061_A%22,%22entertainment.X9001_A%22,%22entertainment.X9008_A%22,%22transportation.X6011_A%22,%22LandscapeFacts.NLCDDevPt%22,%22HealthPersonalCareCEX.X8002_A%22]&addDerivativeVariables=index&f=pjson'
     + '&token='
-    + 'XHPeoCaaikDwr65e0aatmJ_KmLCAtyFellqi6ZoDaojD-2gYkq8dCqh6ZfkQ9KMoFjU9kvR3Jny9CqWOsIBUaNldWx-XPXknCaXenboxC39SGgT3Sg2YnIGRKXPhe0Bl_LV5leD7A7abYK94hy3PMw..';
+    + 'VwBONi1EJ19jMcLmQ8NDby3U-mrA3nI1jqh9p1zuA0_xV-hrDrjELGJv9VR9127lUFgf34Vcv30XOGK7opAkwBAIqxrGgNx0p4BsnummljtyWmIwtOWTnCD6VqiulSKJNKFjeuxllH47PkzMSUr0HQ..';
    
     var arcHttp = new XMLHttpRequest();
 
