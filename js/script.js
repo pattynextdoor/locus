@@ -109,6 +109,36 @@ particlesJS({
   "retina_detect": true
 });
 
+function getToken() {
+    return new Promise(function (resolve, reject) {
+        var   formData = new FormData();
+        formData.append("client_id", "CEQawzY6rr5qqRes");
+        formData.append("client_secret", "28dcfe10f990406e8f6f7df792c1999d");
+        formData.append("grant_type", "client_credentials");
+        const serviceURL = "https://www.arcgis.com/sharing/rest/oauth2/token";
+        const tokenRequest = new Request(serviceURL, {
+            method: "POST",
+            headers: new Headers({
+                "Content-Type": "application/x-www-form-urlencoded"
+            }),
+            body: new URLSearchParams("grant_type=client_credentials&client_id=CEQawzY6rr5qqRes&client_secret=28dcfe10f990406e8f6f7df792c1999d")
+        });
+        fetch(tokenRequest)
+        .then(response => {
+            if (response.status === 200) {
+                return response.json();
+            } else {
+                throw new Error("Error requesting token: " + response.body);
+            }
+        })
+        .then(response => {
+            resolve(response);
+        }).catch(error => {
+            reject(error);
+        });
+    });
+}
+
 function decodeURL() {
   var url = window.location.href;
   var query = url.substring(url.indexOf('q=') + 2);
@@ -457,7 +487,7 @@ function(Map, MapView, Graphic, BasemapGallery, Expand, FeatureLayer) {
         Point: pointString,
         SearchDistance: '5',
         BusinessCategory: 'EATING - DRINKING|EDUCATION|ATTRACTIONS - RECREATION|HEALTH CARE SERVICES|SHOPPING|TRAVEL|PERSONAL SERVICES',
-        RecordLimit: '600'
+        RecordLimit: '300'
     });
 
     var xmlHttp = new XMLHttpRequest();
@@ -574,12 +604,22 @@ function(Map, MapView, Graphic, BasemapGallery, Expand, FeatureLayer) {
     teleHttp.open("GET", teleportURL, true);
     teleHttp.send(null);
 
-    var arcURL = 'http://geoenrich.arcgis.com/arcgis/rest/services/World/geoenrichmentserver/Geoenrichment/Enrich?studyareas=[{%22address%22:{%22text%22:%22'
+
+    getToken()
+    .then(response => {
+      console.log((response));
+      var expires = response.expires_in;
+      var my_token = response.access_token; 
+      console.log(my_token);
+
+    var arcURL = 'https://geoenrich.arcgis.com/arcgis/rest/services/World/geoenrichmentserver/Geoenrichment/Enrich?studyareas=[{%22address%22:{%22text%22:%22'
     + encodeURIComponent(searchQuery)
     + '%22,%22sourceCountry%22:%22US%22},%22areaType%22:%22RingBuffer%22,%22bufferUnits%22:%22esriMiles%22,%22bufferRadii%22:[5]}]&analysisvariables=[%225yearincrements.MEDAGE_CY%22,%22Wealth.AVGHINC_CY%22,%22homevalue.AVGVAL_CY%22,%22education.X11002_A%22,%22food.X1054_A%22,%20%22TravelCEX.X7003_A%22,%22transportation.X6061_A%22,%22entertainment.X9001_A%22,%22entertainment.X9008_A%22,%22transportation.X6011_A%22,%22LandscapeFacts.NLCDDevPt%22,%22HealthPersonalCareCEX.X8002_A%22]&addDerivativeVariables=index&f=pjson'
     + '&token='
-    + 'HMpAHGm-7bqzgttKy0pFUjcVCkqvLH-Ce5fgfsq4wI5Qy-OepoWE7-OOmTZlLp78v3Urc-oUK8Zq828wvlXqFDYudYe-NhBgA_Sgm-VmBNBUAoJH1VF3sHbTmI1HLfBmr5Y5ikLE1M5DPsspDYYv_g..';
-   
+    //+ 'VwBONi1EJ19jMcLmQ8NDby3U-mrA3nI1jqh9p1zuA0_xV-hrDrjELGJv9VR9127lUFgf34Vcv30XOGK7opAkwBAIqxrGgNx0p4BsnummljtyWmIwtOWTnCD6VqiulSKJNKFjeuxllH47PkzMSUr0HQ..';
+    + my_token;
+
+
     var arcHttp = new XMLHttpRequest();
 
     arcHttp.onreadystatechange = function() {
@@ -627,7 +667,13 @@ function(Map, MapView, Graphic, BasemapGallery, Expand, FeatureLayer) {
     }
 
     arcHttp.open("GET", arcURL, true);
-    arcHttp.send(null);
+    arcHttp.send(null); 
+
+    }).catch(error => {
+      console.log(error);
+    });
+
+    
 
   }, 2000);
 });
