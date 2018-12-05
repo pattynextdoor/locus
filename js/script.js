@@ -501,7 +501,7 @@ function(Map, MapView, Graphic, BasemapGallery, Expand, FeatureLayer) {
     }
 
     xmlHttp.open("GET", url, true);
-    xmlHttp.setRequestHeader('apikey', '5b6795b2d0b7169ca81fa345cc7d610c');
+    xmlHttp.setRequestHeader('apikey', '0fb87c8457fa476418cbc63ddb1c446c');
     xmlHttp.setRequestHeader('accept', 'application/json');
     xmlHttp.send(null);
 
